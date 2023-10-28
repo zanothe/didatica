@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+<script>
+   var i = 0;
+   function change(interrup, id) {
+        var el = document.getElementById(id.toString());
+        if(el.getAttribute('src') == 'img/lampoff.png') {
+            $("#"+id).removeAttr('src');
+            $("#"+id).attr('src', 'img/lampon.png');
+            i += id;
+        }
+        else {
+            $('#'+id).removeAttr('src');
+            $('#'+id).attr('src', 'img/lampoff.png');
+            i -= id;
+        }        
+        if(interrup.getAttribute('src') == 'img/interruptoff.png') {
+            $(interrup).removeAttr('src');
+            $(interrup).attr('src', 'img/interrupton.png');
+        }
+        else {
+            $(interrup).removeAttr('src');
+            $(interrup).attr('src', 'img/interruptoff.png');
+        }
+        var box = document.getElementById('output');
+        box.innerHTML = i+" W";
+    }
+
+    window.onload = function() {
+        var deg;
+        var png = document.getElementById('analogico');
+        var flag;
+        var temp;
+        png.addEventListener('mousemove', e => {
+            var attr_rotate = png.getAttribute('style');
+            var val = attr_rotate.match(/[0-9]/g);
+            val = Number(val.join(""));
+            
+            console.log('val: '+val);
+            var clienty = Number(e.clientY);
+            console.log('clienty: '+clienty);
+
+            temp > e.clientY ?
+                deg = eval((Number((val)) - Number(clienty))) :
+                    deg = eval((Number((val)) + Number(clienty)));
+
+            var modlamp = document.getElementById('modlamp');        
+            png.setAttribute('style', 'margin:auto;rotate:'+deg+'deg');
+            modlamp.setAttribute('style', 'opacity:'+Number(deg)*0.0001+';')
+            temp = e.clientY;
+        })
+    }
+
+    
+
+</script>
+<style>
+    table {
+        align-self: center;
+        align-items: center;
+    }
+    table td {
+        border: 0px;
+        /*margin-left: 30px;
+        margin-right: 30px;*/
+    }
+    .text {
+        margin:30px;
+    }
+</style>
+</head>
+
+<body>
+    <div style="margin:auto;width:1000px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3 style="text-align: center;">Digital</h3>
+                <table style="display:flex" style="border:0px">
+
+            <tr>
+                <td>
+                    <img id="128" src="img/lampoff.png" />        </td>
+
+                <td>
+                    <img id="64" src="img/lampoff.png"/>        </td>
+                <td>
+                    <img id="32" src="img/lampoff.png" />        </td>
+                <td>
+                    <img id="16" src="img/lampoff.png" />        </td>
+                <td>
+                    <img id="8" src="img/lampoff.png" />        </td>
+                <td>
+                    <img id="4" src="img/lampoff.png" />        </td>
+                
+                <td>
+                    <img id="2" src="img/lampoff.png" />        </td>
+                
+                <td>
+                    <img id="1" src="img/lampoff.png" />        </td>
+            </tr>
+            <tr class="text">
+                <td>
+                    128 W
+                </td>
+                <td>
+                    64 W
+                </td>
+                <td>
+                    32 W
+                </td>
+                <td>
+                    16 W
+                </td>
+                <td>
+                    8 W
+                </td>
+                <td>
+                    4 W
+                </td>
+                <td>
+                    2 W
+                </td>
+                <td>
+                    1 W
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 128)"/>        </td>
+
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 64)"/>        </td>
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 32)"/>        </td>
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 16)"/>        </td>
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 8)"/>        </td>
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 4)"/>        </td>
+                
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 2)"/>        </td>
+                
+                <td>
+                    <img src="img/interruptoff.png" onclick="change(this, 1)"/>        </td>
+            </tr>
+            </tr>
+                </table>
+            </div>
+    
+            <p id="output" style="text-align: center;font-weight: 300;">0 W</p>
+        </div>
+    </div>
+    <div class="panel panel-default" style="margin:auto;width:1000px;" >
+        <div class="panel-body">
+
+            <h3 style="text-align: center;">Analógico</h3>
+            <div style="margin:auto;height:100px;width:300px;background-color:#ccc;">
+                <div style="height:70px;width: 70px;background-image: url('img/analogbk.png');">
+                    <div style="position:relative; top:12px;height: 44px; width: 44px; margin:auto;">
+                        <img style="margin: auto;rotate:0deg" id="analogico" src="img/analogfr.png"/>
+                    </div>
+                </div>
+                <div style="position:relative; top:-70px;left:90px;display:inline-block;background-color: #333;">
+                    <img id="modlamp" style="opacity: 0;" src="img/lampon.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
