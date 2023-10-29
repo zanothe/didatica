@@ -1,0 +1,253 @@
+<!--
+        O conceito de limite para aplicação da derivada.
+-->
+
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<script src="assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="assets/plugins/jquery.cockie.min.js" type="text/javascript"></script>
+<script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+
+<script>
+function main() {
+        var i;
+        var j;
+        var el = document.getElementById('svgel');
+        var ln1 = document.getElementById('ln1');
+        var ln2 = document.getElementById('ln2');
+        
+        //Plotting the function
+        for(i=0;i<=250;i++) {
+                var txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                txt.setAttribute('xml:space', 'preserve');
+                txt.setAttribute('font-size', '15');
+                txt.setAttribute('font-family', 'sans-serif');
+                txt.setAttribute('y', Math.abs(500-(i*0.1)**2) );
+                txt.setAttribute('x', i);
+                var textNod = document.createTextNode('.');
+                txt.appendChild(textNod);
+                el.appendChild(txt);                
+        }
+        //END plotting
+
+        ln2.setAttribute('y1', Math.abs(500-((200*0.1)**2)) ); 
+        ln1.setAttribute('y1', Math.abs(500-((100*0.1)**2)) ); 
+        
+        
+        //Attributes 
+        var ln1y1 = ln1.getAttribute('y1');
+        var ln2y1 = ln2.getAttribute('y1');
+        var ln1x1 = ln1.getAttribute('x1');
+        var ln2x1 = ln2.getAttribute('x1');
+        var ln1y2 = ln1.getAttribute('y2');
+        var ln2y2 = ln2.getAttribute('y2');
+        var ln1x2 = ln1.getAttribute('x2');
+        var ln2x2 = ln2.getAttribute('x2');
+                
+        //Creating elements
+        var xaxis = document.createElementNS('http://www.w3.org/2000/svg', 'line'); 
+        xaxis.setAttribute('stroke-width', 1.5);
+        xaxis.setAttribute('stroke', '#000');
+        xaxis.setAttribute('x1', 0);
+        xaxis.setAttribute('x2', 250);
+        xaxis.setAttribute('y1', 500);
+        xaxis.setAttribute('y2', 500);
+        el.appendChild(xaxis);
+        //Cos
+        var cos = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        cos.setAttribute('stroke-width', 1.5);
+        cos.setAttribute('stroke', '#55bb55');
+        cos.setAttribute('x1', ln1x1);
+        cos.setAttribute('x2', ln2x2);
+        cos.setAttribute('y1', ln1y1);
+        cos.setAttribute('y2', ln1y1);
+        el.appendChild(cos);
+        //Tangent line
+        var tang_line = document.createElementNS('http://www.w3.org/2000/svg', 'line');                           
+        tang_line.setAttribute('id', 'tang_line');
+        el.appendChild(tang_line);
+        //Circunference
+        var cir = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse')                        
+        cir.setAttribute('id', 'cir');
+        cir.setAttribute('stroke-width', '2');
+        cir.setAttribute('stroke', '#000000');
+        cir.setAttribute('cy', ln1y1 );
+        cir.setAttribute('cx', 100 );
+        cir.setAttribute('fill', 'null');             
+        el.appendChild(cir);
+       
+        function tang() {
+                var el = document.getElementById('svgel');
+                var ln1 = document.getElementById('ln1');
+                var ln2 = document.getElementById('ln2');
+                var cir = document.getElementById('cir');
+                var tang_line = document.getElementById('tang_line');
+                var count = 0;
+
+                
+                function gear() {;
+                        ln2.setAttribute('x1', 200-count);
+                        ln2.setAttribute('x2', 200-count);
+                        ln2.setAttribute('y1', Math.abs(500-((200-count)*0.1)**2));
+                
+                        //Attributes 
+                        ln1y1 = ln1.getAttribute('y1');
+                        ln2y1 = ln2.getAttribute('y1');
+                        ln1x1 = ln1.getAttribute('x1');
+                        ln2x1 = ln2.getAttribute('x1');
+                        ln1y2 = ln1.getAttribute('y2');
+                        ln2y2 = ln2.getAttribute('y2');
+                        ln1x2 = ln1.getAttribute('x2');
+                        ln2x2 = ln2.getAttribute('x2');
+                        //concerning line
+                        var dist_line = Math.sqrt(Math.abs(ln2x1-ln1x1)**2 + Math.abs(((500-ln2y1)-(500-ln1y1))**2));   
+                        var ang_c = Math.abs((500-ln2y1)-(500-ln1y1))/Math.abs(ln2x1-ln1x1);
+                        //setting_tang_line
+                        var x1 = 0;
+                        var x2 = 500;    
+
+                        var y1 = (500-((ang_c*(0 - ln1x1) + (500-ln1y1))));
+                        var y2 = (500-((ang_c*(500 - ln1x1) + (500-ln1y1))));    
+                        
+                        tang_line.setAttribute('stroke-width', '2');
+                        tang_line.setAttribute('stroke', '#000000');
+                        tang_line.setAttribute('x1', x1 );
+                        tang_line.setAttribute('x2', x2 );
+                        tang_line.setAttribute('y1', y1 );
+                        tang_line.setAttribute('y2', y2 );           
+                        //Changing ellipseRef radius
+                        cir.setAttribute('stroke-width', '2');
+                        cir.setAttribute('stroke', '#000000');
+                        cir.setAttribute('fill', 'transparent');
+                        cir.setAttribute('cy', ln1y1 );
+                        cir.setAttribute('cx', 100 );
+                        cir.setAttribute('ry', dist_line );
+                        cir.setAttribute('rx', dist_line );  //im mad?: there is none rect         
+                        
+                        cos.setAttribute('x2', ln2x1);
+                        
+                        $('#svgel').find('#fxplush').remove();
+                        var fxplush = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                                fxplush.setAttribute('xml:space', 'preserve');
+                                fxplush.setAttribute('id', 'fxplush');
+                                fxplush.setAttribute('font-size', '16px');
+                                fxplush.setAttribute('font-family', 'sans-serif');
+                                fxplush.setAttribute('stroke', '#000');
+                                fxplush.setAttribute('y', 530 );
+                                fxplush.setAttribute('x', ln2x1);
+                                var textNod = document.createTextNode('f(x + h)');
+                                fxplush.appendChild(textNod);
+                                el.appendChild(fxplush);
+
+                         $('#svgel').find('#h').remove();
+                                var h = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                                h.setAttribute('id', 'h');
+                                h.setAttribute('xml:space', 'preserve');
+                                h.setAttribute('font-size', '16px');
+                                h.setAttribute('font-family', 'sans-serif');
+                                h.setAttribute('stroke', '#55bb55');
+                                h.setAttribute('y', ln1y1);
+                                h.setAttribute('x', ln2x1);
+                                var textNod = document.createTextNode('h');
+                                h.appendChild(textNod);
+                                el.appendChild(h);
+
+                        $('#svgel').find('#fxplushminusfx').remove();
+                                var fxplushminusfx = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                                fxplushminusfx.setAttribute('id', 'fxplushminusfx');
+                                fxplushminusfx.setAttribute('xml:space', 'preserve');
+                                fxplushminusfx.setAttribute('font-size', '16px');
+                                fxplushminusfx.setAttribute('font-family', 'sans-serif');
+                                fxplushminusfx.setAttribute('stroke', '#000');
+                                fxplushminusfx.setAttribute('y', ln1y1-30);
+                                fxplushminusfx.setAttribute('x', ln2x1);
+                                var textNod = document.createTextNode('f(x + h) - f(x)');
+                                fxplushminusfx.appendChild(textNod);
+                                el.appendChild(fxplushminusfx);
+                        
+
+
+
+                        var fx = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                        fx.setAttribute('xml:space', 'preserve');
+                        fx.setAttribute('font-size', '16px');
+                        fx.setAttribute('font-family', 'sans-serif');
+                        fx.setAttribute('stroke', '#000');
+                        fx.setAttribute('y', 530 );
+                        fx.setAttribute('x', ln1x1-48);
+                        var textNod = document.createTextNode('f(x)');
+                        fx.appendChild(textNod);
+                        el.appendChild(fx);
+
+                        
+
+                
+                        
+                        count++;
+                        if(count<100) {
+                                setTimeout(gear, 2**(count/15));
+                        }
+                        else {
+                                var inc=0;
+                                cir.setAttribute('ry', 0 );
+                                cir.setAttribute('rx', 0 );
+                                tang_line = document.createElementNS('http://www.w3.org/2000/svg', 'line');                           
+                                tang_line.setAttribute('id', 'tang_line');
+                                tang_line.setAttribute('stroke-width', '6px');
+                                tang_line.setAttribute('stroke', '#5B9BA2');
+                                tang_line.setAttribute('x1', x1 );
+                                tang_line.setAttribute('x2', x2 );
+                                tang_line.setAttribute('y1', y1 );
+                                tang_line.setAttribute('y2', y2 ); 
+                                el.appendChild(tang_line);
+                                txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');                           
+                                txt.setAttribute('xml:space', 'preserve');
+                                txt.setAttribute('font-size', '32px');
+                                txt.setAttribute('font-family', 'sans-serif');
+                                txt.setAttribute('stroke', '#5B9BA2');
+                                txt.setAttribute('fill', 'transparent');
+                                txt.setAttribute('y', 450 );
+                                txt.setAttribute('x', 200);
+                                var textNod = document.createTextNode('chcrt');
+                                txt.appendChild(textNod);
+                                el.appendChild(txt);
+
+                                function explines() {                                        
+                                                        var incopc=9;
+                                                        function cgnopc(){
+                                                                txt.setAttribute('stroke-opacity', 0.1*incopc);
+                                                                tang_line.setAttribute('stroke-opacity', 0.1*incopc);
+                                                                if(incopc!=0){
+                                                                        setTimeout(cgnopc, 100);
+                                                                }
+                                                incopc--;
+                                        }
+                                        cgnopc();
+                                }setTimeout(main, 2000);       
+                        setTimeout(explines, 1000);                                        
+                        }
+                }
+                gear();
+        }
+
+        tang(); 
+}
+////main();
+//tg();
+</script>
+
+<div style="padding-top:15px">
+    <svg style="display:block;margin-left:auto;margin-right:auto;border:2px solid #5B9BA2;border-radius:5px" 
+id="svgel" width="300" height="600">
+        <line id="ln1" y1="0" y2="500" x1="100" x2="100" stroke-width="2" stroke="#cccccc"/>
+        <line id="ln2" y1="0" y2="500" x1="200" x2="200" stroke-width="2" stroke="#000000"/>   
+    </svg>
+</div>
+
+<button onclick="main()">Start main</button>
